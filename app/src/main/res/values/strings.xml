@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AGBOperator</string>
+    <string name="connect">Connect</string>
+    <string name="dump_rom">Dump Rom</string>
+    <string name="run_game">Run Game</string>
+    <string name="unknown">Title: {{TITLE}}\nGameBoy Color Support: {{GBC_SUPPORT}}\nSuper GameBoy Support: {{SGB_SUPPORT}}\nRom Size: {{ROM_SIZE}}\nRAM Size: {{RAM_SIZE}}\nRegion: {{REGION}}</string>
+    <string name="cartridge_box_art">Cartridge Box Art</string>
+</resources>
