@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
                     CARTRIDGE_INFO = (JSONObject) ROMS_INFO.get(epilogueId);
 
                     setInfo(cartridgeInfo, CARTRIDGE_INFO);
+
+                    Toast.makeText(context, "GB Operator와 연결되었습니다.", Toast.LENGTH_SHORT).show();
                 } catch (IOException | JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -101,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Rom Dump
+                Toast.makeText(context, "롬 덤프를 시작합니다.\n본 작업은 최소 1~3분 가량 소요됩니다.", Toast.LENGTH_LONG).show();
                 romPath = device.dumpRom(CARTRIDGE_INFO_DUMP, CARTRIDGE_INFO);
+                Toast.makeText(context, "Rom 덤프에 성공하였습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -109,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start RetroArch64
+                Toast.makeText(context, "덤프 된 롬을 실행합니다.", Toast.LENGTH_SHORT).show();
                 EmuIntent.startIntent(context, romPath);
             }
         });
