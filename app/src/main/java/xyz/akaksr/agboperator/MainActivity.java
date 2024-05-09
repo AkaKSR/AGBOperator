@@ -27,6 +27,9 @@ import java.util.Objects;
 import xyz.akaksr.agboperator.intent.EmuIntent;
 import xyz.akaksr.agboperator.usb.GBODevice;
 import xyz.akaksr.agboperator.usb.UsbCommunicationManager;
+import xyz.akaksr.agboperator.util.DownloadImage;
+import xyz.akaksr.agboperator.util.FileUtil;
+import xyz.akaksr.agboperator.util.ImageUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        String BOXART_URL = getResources().getString(R.string.boxart_url);
         PendingIntent permissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
 
         Context context = this;
@@ -93,6 +96,19 @@ public class MainActivity extends AppCompatActivity {
 
                     setInfo(cartridgeInfo, CARTRIDGE_INFO);
 
+                    Map<String, Integer> imageViewSize = getBoxArtSize(boxArt);
+
+                    // TODO 박스아트 이미지 변경
+                    // TODO image/boxart에 파일있는지 확인
+                    String boxartPath = "/image/boxart/" + CARTRIDGE_INFO.getString("box_art");
+                    if (FileUtil.existsFile(boxartPath)) {
+                        ImageUtil.setImage(boxArt, boxartPath);
+                    } else {
+                        new DownloadImage(boxArt, boxartPath).execute(BOXART_URL + CARTRIDGE_INFO.getString("box_art").replace(" ", "%20"));
+                    }
+
+                    setBoxArtSize(boxArt, imageViewSize.get("width"), imageViewSize.get("height"));
+
                     Toast.makeText(context, "GB Operator와 연결되었습니다.", Toast.LENGTH_SHORT).show();
                 } catch (IOException | JSONException e) {
                     throw new RuntimeException(e);
@@ -130,5 +146,20 @@ public class MainActivity extends AppCompatActivity {
         infoStr = infoStr.replace("{{REGION}}", Objects.requireNonNull(replaceMap.get("destination")).toString());
 
         cartridgeInfo.setText(infoStr);
+    }
+
+    public Map<String, Integer> getBoxArtSize(ImageView imageView) {
+        Map<String, Integer> resultMap = new HashMap<>();
+
+        resultMap.put("width", imageView.getWidth());
+        resultMap.put("height", imageView.getHeight());
+
+        return resultMap;
+    }
+    public void setBoxArtSize(ImageView imageView, int width, int height) {
+        imageView.getLayoutParams().width = width;
+        imageView.getLayoutParams().height = height;
+
+        imageView.requestLayout();
     }
 }

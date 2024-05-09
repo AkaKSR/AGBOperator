@@ -36,6 +36,7 @@ import java.util.concurrent.TimeoutException;
 import xyz.akaksr.agboperator.R;
 import xyz.akaksr.agboperator.prop.Constants;
 import xyz.akaksr.agboperator.util.ByteUtil;
+import xyz.akaksr.agboperator.util.FileUtil;
 
 public class GBODevice extends ByteUtil {
     UsbManager usbManager;
@@ -59,7 +60,8 @@ public class GBODevice extends ByteUtil {
     }
 
     public String dumpRom(Map<String, Object> CARTRIDGE_INFO_DUMP, JSONObject CARTRIDGE_INFO) {
-        File dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+//        File dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
 
         try {
             Log.i("AGBOperator", ":: FileName = " + CARTRIDGE_INFO.get("full_title"));
@@ -74,24 +76,26 @@ public class GBODevice extends ByteUtil {
             Log.i("AGBOperator", ":: header = " + CARTRIDGE_INFO.get("header_checksum"));
             Log.i("AGBOperator", ":: global = " + CARTRIDGE_INFO.get("global_checksum"));
 
+            String filePath = dirPath.toString() + "/AGBOperator/";
+
+            File fileDir = new File(filePath);
+            File cacheDir = new File(filePath + "cache");
+            File boxartDir = new File(filePath + "image/boxart");
+            if (!fileDir.exists() || !cacheDir.exists() || boxartDir.exists()) {
+                fileDir.mkdir();
+                cacheDir.mkdir();
+                boxartDir.mkdirs();
+            }
+
             byte[] romData = readRom(usbComm, CARTRIDGE_INFO_DUMP);
 
             Log.i("AGBOperator", ":: romData length = " + romData.length);
 
-            String filePath = dirPath.toString() + "/AGBOperator/" + CARTRIDGE_INFO.get("full_title");
-
             Log.i("AGBOperator", ":: filePath = " + filePath);
 
-            FileOutputStream fos = new FileOutputStream(filePath);
-            DataOutputStream dos = new DataOutputStream(fos);
+            FileUtil.writeFile(filePath + "cache/" + CARTRIDGE_INFO.get("full_title"), romData);
 
-            dos.write(romData);
-
-            dos.flush();
-            dos.close();
-            fos.close();
-
-            return filePath;
+            return filePath + CARTRIDGE_INFO.get("full_title");
         } catch (IOException e) {
             Log.e("getRomsInfo - IOException", e.getMessage());
             throw new RuntimeException(e);

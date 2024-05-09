@@ -5,4 +5,5 @@
     <string name="run_game">Run Game</string>
     <string name="unknown">Title: {{TITLE}}\nGameBoy Color Support: {{GBC_SUPPORT}}\nSuper GameBoy Support: {{SGB_SUPPORT}}\nRom Size: {{ROM_SIZE}}\nRAM Size: {{RAM_SIZE}}\nRegion: {{REGION}}</string>
     <string name="cartridge_box_art">Cartridge Box Art</string>
+    <string name="boxart_url">http://thumbnailpacks.libretro.com/Nintendo%20-%20Game%20Boy/Named_Boxarts/</string>
 </resources>
