@@ -35,4 +35,26 @@ public class FileUtil {
 
         return new File(filePath).exists();
     }
+
+    public static void initDir() {
+        File dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+
+        String filePath = dirPath.toString() + "/AGBOperator/";
+
+        File fileDir = new File(filePath);
+        File cacheDir = new File(filePath + "cache");
+        File boxartDir = new File(filePath + "image/boxart");
+
+        if (!fileDir.exists()) {
+            fileDir.mkdir();
+        }
+
+        if (!cacheDir.exists()) {
+            cacheDir.mkdir();
+        }
+
+        if (!boxartDir.exists()) {
+            boxartDir.mkdirs();
+        }
+    }
 }

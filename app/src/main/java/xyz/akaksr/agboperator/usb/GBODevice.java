@@ -60,7 +60,6 @@ public class GBODevice extends ByteUtil {
     }
 
     public String dumpRom(Map<String, Object> CARTRIDGE_INFO_DUMP, JSONObject CARTRIDGE_INFO) {
-//        File dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
 
         try {
@@ -77,15 +76,6 @@ public class GBODevice extends ByteUtil {
             Log.i("AGBOperator", ":: global = " + CARTRIDGE_INFO.get("global_checksum"));
 
             String filePath = dirPath.toString() + "/AGBOperator/";
-
-            File fileDir = new File(filePath);
-            File cacheDir = new File(filePath + "cache");
-            File boxartDir = new File(filePath + "image/boxart");
-            if (!fileDir.exists() || !cacheDir.exists() || boxartDir.exists()) {
-                fileDir.mkdir();
-                cacheDir.mkdir();
-                boxartDir.mkdirs();
-            }
 
             byte[] romData = readRom(usbComm, CARTRIDGE_INFO_DUMP);
 
